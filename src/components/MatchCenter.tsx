@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Clock, Activity, TrendingUp, Circle } from "lucide-react";
+import { NotificationBell } from "./NotificationBell";
+import { useMatchNotifications } from "@/hooks/useMatchNotifications";
 
 interface Match {
   id: number;
@@ -91,6 +94,8 @@ const getStatusBadge = (status: Match["status"], minute: number) => {
 };
 
 export const MatchCenter = () => {
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  useMatchNotifications(notificationsEnabled);
   const featuredMatch = liveMatches[0];
 
   return (
@@ -114,9 +119,15 @@ export const MatchCenter = () => {
             </div>
             <p className="text-muted-foreground">Live scores and real-time updates</p>
           </div>
-          <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-sm font-medium text-primary">3 Live Matches</span>
+          <div className="hidden sm:flex items-center gap-3">
+            <NotificationBell 
+              enabled={notificationsEnabled} 
+              onToggle={setNotificationsEnabled} 
+            />
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <span className="text-sm font-medium text-primary">3 Live Matches</span>
+            </div>
           </div>
         </motion.div>
 
